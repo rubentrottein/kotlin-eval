@@ -2,6 +2,7 @@ package com.example.userlist
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,15 +23,42 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Initialiser RecyclerView
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = UserAdapter(currentUserList)
-
+        fun recyclerViewUpdate(){
+            val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = UserAdapter(currentUserList)
+        }
+        recyclerViewUpdate()
 
         val button : FloatingActionButton = findViewById(R.id.floatingActionButton)
         button.setOnClickListener {
-            addUser()
+            val editTextFirstName = findViewById<EditText>(R.id.editTextFirstName)
+            val editTextLastName = findViewById<EditText>(R.id.editTextLastName)
+            val editTextPhone = findViewById<EditText>(R.id.editTextPhone)
+            val editTextEmail = findViewById<EditText>(R.id.editTextEmail)
+
+            val firstName = editTextFirstName.text.toString().trim()
+            val lastName = editTextLastName.text.toString().trim()
+            val phone = editTextPhone.text.toString().trim()
+            val email = editTextEmail.text.toString().trim()
+
+            val user : User = User( currentUserList.size, firstName, lastName, phone, email)
+
+            currentUserList.add(user)
+
+            // Notifier l'adaptateur que la liste des données a changé
+            recyclerViewUpdate()
+
+            // Effacer le formulaire après ajout
+
+
+            editTextFirstName.text.clear()
+            editTextLastName.text.clear()
+            editTextPhone.text.clear()
+            editTextEmail.text.clear()
+
+            recyclerViewUpdate()
+
         }
 
     }
@@ -42,11 +70,6 @@ class MainActivity : AppCompatActivity() {
     )
 
     private fun addUser(){
-        var user : User = User(3, "Mounir","Geraud","01987654321","mounir.geraud@kotlinuserlist.com")
-        currentUserList.add(user)
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = UserAdapter(currentUserList)
     }
 
 }
